@@ -1,6 +1,6 @@
 let columns = document.getElementsByClassName('column');
 let output = document.querySelector('.output');
-let options = ['/', 'x', '-', '+', '=', '%']
+let options = ['/', 'x', '-', '+', '=', '%', '.']
 let onDone = false;
 
 for (let i=0; i<columns.length; i++) {
@@ -29,7 +29,8 @@ function colClick() {
 
     if (output.textContent.trim().length === 1
         && options.includes(this.textContent)
-        && this.textContent !== '-') {
+        && this.textContent !== '-'
+        && this.textContent !== '.') {
         return;
     } else if (output.textContent.trim().length > 1
                 && options.includes(output.textContent.trim().slice(-1))
@@ -43,10 +44,6 @@ function colClick() {
         output.textContent = '';
     }
 
-    if (this.textContent.trim() == '.') {
-        output.textContent = '0';
-    }
-
     output.textContent += this.textContent;
 }
 
@@ -58,8 +55,14 @@ function showOutput() {
 
         if (result === 0) {
             output.textContent = '0';
+        } else if (result.toString().includes('.')){
+            if (result.toString().length > 5) {
+                output.textContent = result.toExponential(5);
+            } else {
+                output.textContent = result;
+            }
         } else {
-            output.textContent = result.toExponential(5);
+            output.textContent = result;
         }
         onDone = true;
     } catch (error) {
